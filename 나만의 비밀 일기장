@@ -1,1 +1,24 @@
+import datetime  # 날짜와 시간을 다루는 도구 가져오기
 
+def write_diary():
+    # 1. 오늘 날짜 가져오기 (예: 2023-10-27)
+    now = datetime.datetime.now()
+    today_date = now.strftime("%Y-%m-%d")
+    
+    print(f"--- {today_date} 일기 쓰기 ---")
+    
+    # 2. 일기 내용 입력받기
+    content = input("오늘 하루는 어땠나요? 내용을 입력하세요:\n")
+    
+    # 3. 파일에 저장하기
+    # 'a'는 append(추가)의 약자로, 기존 내용 뒤에 이어서 쓴다는 뜻입니다.
+    # encoding='utf-8'은 한글이 깨지지 않게 해줍니다.
+    with open("my_diary.txt", "a", encoding="utf-8") as file:
+        file.write(f"\n[날짜: {today_date}]\n")
+        file.write(content + "\n")
+        file.write("-" * 20 + "\n")
+    
+    print("\n✅ 일기가 성공적으로 저장되었습니다!")
+
+# 프로그램 실행
+write_diary()
