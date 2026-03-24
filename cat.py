@@ -3,9 +3,9 @@ import random
 def get_destiny_place():
     database = {
         "신남": [
-            ["성수동 팝업스토어", "에너지를 발산하기 딱 좋은 공간!", "팝업 스토어는 대기줄이 길 수 있으니 확인 필수!", "NewJeans - Hype Boy", "Avril Lavigne - Girlfriend"],
-            ["홍대 버스킹 거리", "사람들의 열기 속에 섞여보세요.", "밤늦게 가면 더 활기차요!", "Britney Spears - Toxic", "도겸 - GO!"],
-            ["전포 카페거리", "그림을 그리자!", "예쁜 소품샵도 같이 구경하세요.", "Chappell Roan - Pink Pony Club", "Lady Gaga - Abracadabra"] 
+            ["팝업스토어", "에너지를 발산하기 딱 좋은 공간!", "팝업 스토어는 대기줄이 길 수 있으니 확인 필수!", "NewJeans - Hype Boy", "Avril Lavigne - Girlfriend"],
+            ["서면 ", "사람들의 열기 속에 섞여보세요.", "밤늦게 가면 더 활기차요!", "Britney Spears - Toxic", "도겸 - GO!"],
+            ["전포 카페거리", "맛있는 디저트는 어때요 !", "예쁜 소품샵도 같이 구경하세요.", "Chappell Roan - Pink Pony Club", "Lady Gaga - Abracadabra"] 
         ],
         "차분": [
             ["영도 절영해안산책로", "파도 소리를 들으며 생각을 정리해보세요.", "운동화 신고 걷는 걸 추천합니다.", "카더가든 - 밤새", "자우림 - 스물다섯, 스물하나"],
