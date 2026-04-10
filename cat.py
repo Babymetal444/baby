@@ -1,6 +1,32 @@
 import random
+import requests
+
+def get_realtime_weather():
+    # 사용자님이 발급받으신 키를 적용했습니다!
+    api_key = "8a83518bc875053c9640ea201b835f54" 
+    city = "Busan"
+    url = f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}&units=metric"
+    
+    try:
+        # 응답 시간을 조금 더 늘려보았습니다 (최대 10초 대기)
+        response = requests.get(url, timeout=10)
+        if response.status_code == 200:
+            data = response.json()
+            temp = data['main']['temp']
+            condition = data['weather'][0]['main']
+            return temp, condition
+        elif response.status_code == 401:
+            print("(알림: API 키가 아직 활성화되지 않았거나 잘못되었습니다. 잠시 후 다시 시도해 보세요.)")
+            return None, None
+        else:
+            print(f"(서버 응답 에러: {response.status_code})")
+            return None, None
+    except Exception as e:
+        print(f"(연결 에러: {e})")
+        return None, None
 
 def get_destiny_place():
+    # 사용자님의 소중한 노래와 장소 데이터 복구!
     database = {
         "신남": [
             ["팝업스토어", "에너지를 발산하기 딱 좋은 공간!", "팝업 스토어는 대기줄이 길 수 있으니 확인 필수!", "NewJeans - Hype Boy", "Avril Lavigne - Girlfriend"],
@@ -25,16 +51,17 @@ def get_destiny_place():
         ]
     }
 
-    print("🔮 당신의 데이터를 분석하여 운명의 장소를 찾습니다.")
+    print("\n" + "🔮" * 15)
+    print("실시간 날씨와 취향 데이터를 분석하여 운명의 장소를 찾습니다.")
+    print("🔮" * 15)
     
-    # 선택지 안내에 새로운 감정 추가
-    mood = input("지금 기분은 어떠신가요? (신남/차분/우울/화남/설렘): ")
-    weather = input("바깥 날씨는 어떤가요? (맑음/비/흐림): ")
+    temp, condition = get_realtime_weather()
+    
+    mood = input("\n지금 기분은 어떠신가요? (신남/차분/우울/화남/설렘): ")
     with_who = input("누구와 함께인가요? (혼자/친구/연인/부모님/친구들): ")
 
     if mood in database:
         place_info = random.choice(database[mood])
-        
         name = place_info[0]
         reason = place_info[1]
         special_guide = place_info[2]
@@ -42,19 +69,35 @@ def get_destiny_place():
         music_list = place_info[3:]
         lucky_music = random.choice(music_list)
 
-        advice = f"📌 팁: {special_guide}"
-        if weather == "비":
-            advice += " ☔ 비가 오니 이동할 때 우산을 꼭 챙기세요!"
+        # 날씨 기반 안내 문구 작성
+        if temp is not None:
+            weather_report = f"오늘 부산은 {condition}({temp}°C)네요."
+            advice = f"📌 팁: {special_guide}"
+            
+            if "Rain" in condition or "Drizzle" in condition:
+                advice += " ☔ 비가 오니 우산을 꼭 챙기세요!"
+            elif temp > 25:
+                advice += " ☀️ 날씨가 꽤 더워요. 시원한 실내 활동을 추천해요!"
+            elif temp < 10:
+                advice += " 🧥 쌀쌀한 날씨니 옷을 따뜻하게 입으세요!"
+            else:
+                advice += " ✨ 나들이하기 딱 좋은 날씨예요."
+        else:
+            weather_report = "현재 실시간 날씨 정보를 가져올 수 없습니다. (API 활성화 대기 중일 수 있어요!)"
+            advice = f"📌 팁: {special_guide} ✨ 기분 좋은 하루 되세요!"
+
         if with_who == "혼자":
             advice += " 🎧 혼자만의 시간을 온전히 즐기기 좋은 곳입니다."
 
         print("\n" + "✨" * 25)
-        print(f"📍 추천 장소: {name}")
-        print(f"📝 선정 이유: {reason}")
+        print(f"🌍 {weather_report}")
+        print(f"📍 오늘의 추천 장소: {name}")
+        print(f"📝 선정이유: {reason}")
         print(f"🎵 오늘의 운명곡: {lucky_music}")
         print(f"💡 가이드: {advice}")
         print("✨" * 25)
     else:
-        print("\n아직 그 감정에 맞는 장소는 준비 중이에요. 조금만 기다려주세요!")
+        print("\n입력하신 감정 정보를 다시 확인해 주세요! (신남/차분/우울/화남/설렘)")
 
+# 실행
 get_destiny_place()
